@@ -1,140 +1,29 @@
-import random
-from colorama import init, Fore, Style
-from art import tprint
+class SuperHero:
+    people = "people"
 
-init(autoreset=True)
+    def __init__(self, name, nickname, superpower, health_points, catchphrase):
+        self.name = name
+        self.nickname = nickname
+        self.superpower = superpower
+        self.health_points = health_points
+        self.catchphrase = catchphrase
 
-def choose_word():
-    words = ['python', 'hangman', 'challenge', 'programming', 'algorithm']
-    return random.choice(words)
+    def info(self):
+        return f"Name: {self.name}"
 
+    def double_health(self):
+        self.health_points *= 2
 
-def display_hangman(tries):
-    colors = [Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
-    stages = [
-        """
-           ------
-           |    |
-           |    
-           |    
-           |    
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |    
-           |    
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |    |
-           |    
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |   /|
-           |    
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |   /|\\
-           |    
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |   /|\\
-           |   / 
-           |
-        -----
-        """,
-        """
-           ------
-           |    |
-           |    O
-           |   /|\\
-           |   / \\
-           |
-        -----
-        """
-    ]
-    color = colors[6 - tries]
-    return color + stages[tries]
+    def __str__(self):
+        return f"Nickname: {self.nickname}, Superpower: {self.superpower}, Health: {self.health_points}"
+
+    def __len__(self):
+        return len(self.catchphrase)
 
 
-def play_game():
-    word = choose_word()
-    word_completion = "_" * len(word)
-    guessed = False
-    guessed_letters = []
-    guessed_words = []
-    tries = 6
+hero = SuperHero("Tony Stark", "Iron Man", "Intelligence", 100, "I am Iron Man")
 
-    tprint("давайте играть в виселицу", font="random")
-    print(display_hangman(tries))
-    print(word_completion)
-    print("\n")
-
-    while not guessed and tries > 0:
-        guess = input("Введите букву или слово целиком: ").lower()
-        if len(guess) == 1 and guess.isalpha():
-            if guess in guessed_letters:
-                print(Fore.BLUE + f"Вы уже угадывали букву {guess}.")
-            elif guess not in word:
-                print(Fore.RED + f"Буквы {guess} нет в слове.")
-                tries -= 1
-                guessed_letters.append(guess)
-            else:
-                print(Fore.GREEN + f"Отлично! Буква {guess} есть в слове!")
-                guessed_letters.append(guess)
-                word_as_list = list(word_completion)
-                indices = [i for i, letter in enumerate(word) if letter == guess]
-                for index in indices:
-                    word_as_list[index] = guess
-                word_completion = "".join(word_as_list)
-                if "_" not in word_completion:
-                    guessed = True
-        elif len(guess) == len(word) and guess.isalpha():
-            if guess in guessed_words:
-                print(Fore.BLUE + f"Вы уже угадывали слово {guess}.")
-            elif guess != word:
-                print(Fore.RED + f"Слово {guess} не верно.")
-                tries -= 1
-                guessed_words.append(guess)
-            else:
-                guessed = True
-                word_completion = word
-        else:
-            print("Некорректный ввод.")
-
-        print(display_hangman(tries))
-        print(word_completion)
-        print("\n")
-
-    if guessed:
-        tprint("You Win!", font="random")
-    else:
-        tprint("Game Over", font="random")
-        print(f"Вы не угадали слово. Загаданное слово было {word}. Возможно, повезет в следующий раз!")
-
-
-if __name__ == "__main__":
-    play_game()
+hero.info()
+hero.double_health()
+print(hero)
+print(f"Length of catchphrase: {len(hero)}")
